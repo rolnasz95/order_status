@@ -1,5 +1,13 @@
 #include <iostream>
 
+void getOrder(int&, int&, int&);
+void displayOrder(int, int, int);
+void displayDiscount(int, int, int, int);
+
+// Default cost of shipping and cost of each item
+const int fixedShippingFee{ 10 };
+const int fixedPrice{ 100 };
+
 // Function that takes the order: quantity, base stock and whether or not there is a special fee associated with the purchase
 void getOrder(int& orderAmount, int& orderStock,int& specialCharge)
 {
@@ -43,8 +51,8 @@ void getOrder(int& orderAmount, int& orderStock,int& specialCharge)
 void displayOrder(int orderAmount, int orderStock, int specialCharge)
 {
 	// Values for shipping and item price
-	int shippingFee{ 10 };
-	int price{ 100 };
+	int shippingFee{ fixedShippingFee };
+	int price{ fixedPrice };
 
 	if (specialCharge == 1)
 	{
@@ -68,5 +76,19 @@ void displayOrder(int orderAmount, int orderStock, int specialCharge)
 		std::cout << "Orders ready to ship: " << orderAmount << '\n';
 		std::cout << "Shipping and handling charges: " << orderAmount * shippingFee << '\n'; // Calculate shipping costs
 		std::cout << "The total cost of your order is: " << (orderAmount * price) + (orderAmount * shippingFee) << '\n'; // Display total payments
+	}
+
+	displayDiscount(orderAmount, orderStock, price, shippingFee);
+}
+
+void displayDiscount(int orderAmount, int orderStock, int itemPrice, int shippingFee)
+{
+	const int discountMinimumQty{ 500 };	// Minimum purchase amount to receive discount
+	const double discountPercent{ 0.2 };	// 20% discount rate
+	
+	if ((orderAmount >= discountMinimumQty) && (orderStock >= orderAmount))
+	{
+		std::cout << "\nHurray! You qualify for a 20% discount... Here is your revised final price: ";
+		std::cout << '$' << (orderAmount * itemPrice) - ((orderAmount * itemPrice) * discountPercent) + (orderAmount * shippingFee) << '\n';
 	}
 }
